@@ -1,3 +1,8 @@
+## Structurizr
+.structurizr/
+workspace.json
+
+## C++
 # Prerequisites
 *.d
 
