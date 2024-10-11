@@ -12,5 +12,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+      - name: Build the Docker image cpp-poco
+        run: docker compose build cpp-poco
       - name: Build the Docker image user-service
-        run: docker build ./lab2 --file ./lab2/user-service.dockerfile --tag user-service:$(date +%s)
+        run: cd lab2 && docker compose build user-service

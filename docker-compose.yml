@@ -1,0 +1,7 @@
+services:
+  cpp-poco:
+    tty: true
+    image: cpp-poco
+    build:
+      context: .
+      dockerfile: development.dockerfile

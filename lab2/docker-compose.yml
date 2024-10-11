@@ -1,6 +1,10 @@
+include:
+  - "../docker-compose.yml"
+
 services:
   user-service:
     tty: true
+    image: user-service
     container_name: user-service
     cap_add:
       - SYS_PTRACE

@@ -1,11 +1,12 @@
-## Structurizr
+## Local Files
+# Cmake Build Files
+/build
+
+# Structurizr
 .structurizr/
 workspace.json
 
-## Cmake
-/build
-
-## VS Code settings
+# VS Code Settings
 settings.json
 
 ## C++

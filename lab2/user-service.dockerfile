@@ -1,27 +1,6 @@
-FROM ubuntu:24.04 AS build
+FROM cpp-poco AS build
 
 ARG BUILD_TYPE=Release
-
-RUN DEBIAN_FRONTEND=noninteractive
-RUN apt-get update
-RUN apt-get install -y \
-    build-essential \
-    cmake \
-    git \
-    g++ \
-    make \
-    libmysqlclient-dev \
-    libpq-dev \
-    libssl-dev \
-    openssl
-
-# Install Poco
-RUN git clone -b main https://github.com/pocoproject/poco.git
-RUN cd poco && \
-    mkdir cmake-build && \
-    cd cmake-build && \
-    cmake .. && \
-    cmake --build . --config Release
 
 WORKDIR /build
 COPY . .
