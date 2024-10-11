@@ -8,8 +8,50 @@ services:
     container_name: user-service
     cap_add:
       - SYS_PTRACE
+    environment:
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT} 
+      - DB_LOGIN=${POSTGRES_USER}
+      - DB_PASSWORD=${POSTGRES_PASSWORD}
+      - DB_DATABASE=${POSTGRES_DB}
+    depends_on:
+      user-pgdb:
+        condition: service_healthy
     build:
       context: .
       dockerfile: user-service.dockerfile
       args:
         - BUILD_TYPE=${BUILD_TYPE}
+    ports:
+      - "8080:8080"
+    networks:
+      - arch-network
+
+  user-pgdb:
+    image: postgres
+    container_name: user-pgdb
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - PGDATA=${PGDATA}
+      - POSTGRES_DB=${POSTGRES_DB}
+    volumes:
+      - user-db:${PGDATA}
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -d postgres" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    ports:
+      - "5432:5432"
+    networks:
+      - arch-network
+
+volumes:
+  user-db:
+
+networks:
+  arch-network:
+    driver: "bridge"
+    external: false

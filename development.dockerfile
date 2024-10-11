@@ -1,5 +1,6 @@
-FROM ubuntu:24.04
+FROM ubuntu:22.04
 
+# Install Dependencies
 RUN DEBIAN_FRONTEND=noninteractive
 RUN apt-get update
 RUN apt-get install -y \
@@ -15,12 +16,16 @@ RUN apt-get install -y \
 
 # Install Poco
 RUN git clone -b main https://github.com/pocoproject/poco.git
-RUN cd poco && \
-    mkdir cmake-build && \
+WORKDIR /poco
+RUN mkdir cmake-build && \
     cd cmake-build && \
     cmake .. && \
-    cmake --build . --config Release -j `nproc`
+    cmake --build . --config Release && \
+    cmake --build . --target install -j `nproc`
+WORKDIR /
+RUN ldconfig && \
+    rm -rf poco
 
-# Utilities
+# Install Utilities
 RUN apt-get install -y \
-    clang-format
+    clang-format htop tree vim

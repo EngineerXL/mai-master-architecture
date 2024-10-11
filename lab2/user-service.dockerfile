@@ -13,13 +13,14 @@ RUN if [ "${BUILD_TYPE}" = "Debug" ] ; \
     fi
 RUN cmake --build build -j `nproc`
 
-FROM ubuntu:24.04
-
-WORKDIR /app
+FROM ubuntu:22.04
 
 RUN apt-get update
-RUN apt-get install -y gdb
+RUN apt-get install -y gdb libpq-dev python3 python3-pip
+RUN apt-get clean
 
+WORKDIR /app
+COPY scripts/ .
+RUN pip install -r requirements.txt
 COPY --from=build /build/build/user-service .
-
-ENTRYPOINT [ "./user-service" ]
+ENTRYPOINT [ "bash", "run.sh" ]

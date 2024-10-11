@@ -2,6 +2,9 @@
 # Cmake Build Files
 /build
 
+# Python venv
+.venv
+
 # Structurizr
 .structurizr/
 workspace.json
