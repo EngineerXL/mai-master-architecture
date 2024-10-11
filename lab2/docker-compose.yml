@@ -1,0 +1,11 @@
+services:
+  user-service:
+    tty: true
+    container_name: user-service
+    cap_add:
+      - SYS_PTRACE
+    build:
+      context: .
+      dockerfile: user-service.dockerfile
+      args:
+        - BUILD_TYPE=${BUILD_TYPE}

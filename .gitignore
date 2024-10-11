@@ -2,6 +2,12 @@
 .structurizr/
 workspace.json
 
+## Cmake
+/build
+
+## VS Code settings
+settings.json
+
 ## C++
 # Prerequisites
 *.d
