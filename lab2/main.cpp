@@ -1,14 +1,6 @@
-#include <exception>
-#include <iostream>
+#include "web_server/http_web_server.hpp"
 
-int main() {
-    int a = 0, b = 1;
-    bool flag = true;
-    while (flag && b < 2e9) {
-        ++a;
-        if (a % 10 == 0) ++b;
-    }
-    std::cout << a << std::endl;
-    std::cout << "Hello world!" << std::endl;
-    return 0;
+int main(int argc, char* argv[]) {
+    HTTPWebServer app;
+    return app.run(argc, argv);
 }

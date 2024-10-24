@@ -18,7 +18,9 @@
 				"ms-vscode.cpptools-themes",
 				"xaver.clang-format",
 				"twxs.cmake",
-				"ms-vscode.cmake-tools"
+				"ms-vscode.cmake-tools",
+				"hediet.debug-visualizer",
+				"redhat.vscode-yaml"
 			]
 		}
 	}

@@ -4,7 +4,7 @@ user-service:
 	docker compose build user-service
 
 up:
-	docker compose up user-service
+	docker compose up -d user-service
 
 down:
 	docker compose down -v

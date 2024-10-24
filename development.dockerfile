@@ -22,9 +22,7 @@ RUN mkdir cmake-build && \
     cmake .. && \
     cmake --build . --config Release && \
     cmake --build . --target install -j `nproc`
-WORKDIR /
-RUN ldconfig && \
-    rm -rf poco
+RUN ldconfig && cd .. && rm -rf poco
 
 # Install Utilities
 RUN apt-get install -y \
