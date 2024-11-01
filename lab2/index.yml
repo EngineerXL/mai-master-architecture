@@ -1,0 +1,274 @@
+openapi: "3.0.0"
+info:
+  version: "1.0.0"
+  title: "User service"
+  description: "User service"
+
+servers:
+  - url: http://localhost:8080
+
+paths:
+  /user:
+    post:
+      description: Create new user
+      parameters:
+        - name: first_name
+          in: query
+          required: true
+          schema:
+            $ref: "#/components/schemas/UserFirstName"
+        - name: last_name
+          in: query
+          required: true
+          schema:
+            $ref: "#/components/schemas/UserLastName"
+        - name: email
+          in: query
+          required: true
+          schema:
+            $ref: "#/components/schemas/UserEmail"
+        - name: login
+          in: query
+          required: true
+          schema:
+            $ref: "#/components/schemas/UserLogin"
+        - name: password
+          in: query
+          required: true
+          schema:
+            $ref: "#/components/schemas/UserPassword"
+      responses:
+        200:
+          $ref: "#/components/responses/UserID"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        404:
+          $ref: "#/components/responses/NotFound"
+        500:
+          $ref: "#/components/responses/InternalServerError"
+
+    get:
+      description: Get user information by id
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            $ref: "#/components/schemas/UserID"
+      responses:
+        200:
+          $ref: "#/components/responses/User"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        404:
+          $ref: "#/components/responses/NotFound"
+        500:
+          $ref: "#/components/responses/InternalServerError"
+
+    put:
+      description: Update user information
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            $ref: "#/components/schemas/UserID"
+        - name: first_name
+          in: query
+          required: true
+          schema:
+            $ref: "#/components/schemas/UserFirstName"
+        - name: last_name
+          in: query
+          required: true
+          schema:
+            $ref: "#/components/schemas/UserLastName"
+        - name: email
+          in: query
+          required: true
+          schema:
+            $ref: "#/components/schemas/UserEmail"
+        - name: login
+          in: query
+          required: true
+          schema:
+            $ref: "#/components/schemas/UserLogin"
+        - name: password
+          in: query
+          required: true
+          schema:
+            $ref: "#/components/schemas/UserPassword"
+      responses:
+        200:
+          $ref: "#/components/responses/UserID"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        404:
+          $ref: "#/components/responses/NotFound"
+        500:
+          $ref: "#/components/responses/InternalServerError"
+
+    delete:
+      description: Delete user by id
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            $ref: "#/components/schemas/UserID"
+      responses:
+        200:
+          $ref: "#/components/responses/UserID"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        404:
+          $ref: "#/components/responses/NotFound"
+        500:
+          $ref: "#/components/responses/InternalServerError"
+
+  /user/search/login:
+    get:
+      description: Search user by login
+      parameters:
+        - name: login
+          in: query
+          required: true
+          schema:
+            $ref: "#/components/schemas/UserLogin"
+      responses:
+        200:
+          $ref: "#/components/responses/User"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        404:
+          $ref: "#/components/responses/NotFound"
+        500:
+          $ref: "#/components/responses/InternalServerError"
+
+  /user/search/name:
+    get:
+      description: Search user by first and last names
+      parameters:
+        - name: first_name
+          in: query
+          required: true
+          schema:
+            $ref: "#/components/schemas/UserFirstName"
+        - name: last_name
+          in: query
+          required: true
+          schema:
+            $ref: "#/components/schemas/UserLastName"
+      responses:
+        200:
+          $ref: "#/components/responses/ListOfUsers"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        404:
+          $ref: "#/components/responses/NotFound"
+        500:
+          $ref: "#/components/responses/InternalServerError"
+
+components:
+  schemas:
+    UserID:
+      description: User ID
+      type: integer
+
+    UserFirstName:
+      description: User First Name
+      type: string
+
+    UserLastName:
+      description: User Last Name
+      type: string
+
+    UserEmail:
+      description: User Email
+      type: string
+
+    UserLogin:
+      description: User Logim
+      type: string
+
+    UserPassword:
+      description: User Password Hash
+      type: string
+
+    User:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/UserID"
+        first_name:
+          $ref: "#/components/schemas/UserFirstName"
+        last_name:
+          $ref: "#/components/schemas/UserLastName"
+        email:
+          $ref: "#/components/schemas/UserEmail"
+        login:
+          $ref: "#/components/schemas/UserLogin"
+        password:
+          $ref: "#/components/schemas/UserPassword"
+
+    ListOfUsers:
+      type: array
+      items:
+        $ref: "#/components/schemas/User"
+
+    Error:
+      type: object
+      properties:
+        status:
+          description: Error code
+          type: integer
+        detail:
+          description: Human-readable error description
+          type: string
+        instance:
+          description: Requested path
+          type: string
+
+  responses:
+    User:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/User"
+    UserID:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/UserID"
+    ListOfUsers:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ListOfUsers"
+    BadRequest:
+      description: Request is incomplete
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    NotFound:
+      description: User not found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    NotAllowed:
+      description: Method is not allowed
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
