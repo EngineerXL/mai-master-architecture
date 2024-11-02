@@ -18,5 +18,5 @@ jobs:
         run: cd lab2 && docker compose build user-service
       - name: Build wrk test
         run: cd lab2 && docker compose build test-lab2
-      - name: Build wrk test
+      - name: Run wrk test
         run: cd lab2 && bash scripts/test.sh
