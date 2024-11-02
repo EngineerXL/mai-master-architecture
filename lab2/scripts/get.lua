@@ -4,5 +4,5 @@ request = function()
     headers = {}
     headers["Content-Type"] = "application/json"
     body = ''
-    return wrk.format("GET", "/user?id=" .. math.random(1, 100), headers, body)
+    return wrk.format("GET", "/user?id=" .. math.random(1, 100000), headers, body)
 end

@@ -16,5 +16,7 @@ jobs:
         run: docker compose build cpp-poco
       - name: Build the Docker image user-service
         run: cd lab2 && docker compose build user-service
-      - name: Run wrk test
-        run: cd lab2 && bash ./scripts/test.sh
+      - name: Build wrk test
+        run: cd lab2 && docker compose build test-lab2
+      - name: Build wrk test
+        run: cd lab2 && bash scripts/test.sh

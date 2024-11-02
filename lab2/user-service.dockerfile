@@ -4,11 +4,13 @@ ARG BUILD_TYPE=Release
 
 # Install Python and Debug Utilities
 RUN apt-get update
-RUN apt-get install -y gdb libpq-dev python3 python3-pip
+RUN apt-get install -y curl gdb libpq-dev python3 python3-pip
 RUN apt-get clean
 
 WORKDIR /app
-COPY scripts/ .
+COPY scripts/fill.py .
+COPY scripts/requirements.txt .
+COPY scripts/run.sh .
 RUN pip install -r requirements.txt
 
 WORKDIR /build

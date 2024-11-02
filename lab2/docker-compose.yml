@@ -18,6 +18,12 @@ services:
     depends_on:
       user-pgdb:
         condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sS http://user-service:8080"]
+      interval: 30s
+      timeout: 1s
+      retries: 5
     build:
       context: .
       dockerfile: user-service.dockerfile
@@ -46,6 +52,18 @@ services:
       retries: 5
     ports:
       - "5432:5432"
+    networks:
+      - arch-network
+    
+  test-lab2:
+    image: test-lab2
+    container_name: test-lab2
+    build:
+      context: .
+      dockerfile: test.dockerfile
+    depends_on:
+      user-service:
+        condition: service_healthy
     networks:
       - arch-network
 
