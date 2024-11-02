@@ -5,14 +5,11 @@ from sqlalchemy.orm import Session
 from faker import Faker
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        raise RuntimeError("Expected an integer argument")
-    n = int(sys.argv[1])
-
     login = os.getenv("DB_LOGIN")
     password = os.getenv("DB_PASSWORD")
     host = os.getenv("DB_HOST")
     db = os.getenv("DB_DATABASE")
+    n = int(os.getenv("TEST_N_USERS"))
 
     fake = Faker(locale=["en_US"])
     fake.seed_instance(998244353)
@@ -51,3 +48,4 @@ if __name__ == "__main__":
                 )
             )
         session.commit()
+    print(f"Database is successfully filled with {n} randomly generated user data.")

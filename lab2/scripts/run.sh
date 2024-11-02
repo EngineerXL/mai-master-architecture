@@ -1,3 +1,3 @@
 #!/bin/bash
-python3 fill.py 1000
+python3 fill.py
 ./user-service

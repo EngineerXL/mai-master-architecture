@@ -20,7 +20,8 @@
 				"twxs.cmake",
 				"ms-vscode.cmake-tools",
 				"hediet.debug-visualizer",
-				"redhat.vscode-yaml"
+				"redhat.vscode-yaml",
+				"42crunch.vscode-openapi"
 			]
 		}
 	}

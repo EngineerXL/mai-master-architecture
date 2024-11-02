@@ -12,6 +12,9 @@ workspace.json
 # VS Code Settings
 settings.json
 
+# OpenAPI (Swagger) files
+.42c/
+
 ## C++
 # Prerequisites
 *.d
