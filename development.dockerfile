@@ -24,6 +24,16 @@ RUN mkdir cmake-build && \
     cmake --build . --target install -j `nproc`
 RUN ldconfig && cd .. && rm -rf poco
 
-# Install Utilities
+# Install Python and Debug Utilities
+RUN apt-get update
 RUN apt-get install -y \
-    clang-format htop tree vim
+    curl \
+    gdb \
+    libpq-dev \
+    python3 \
+    python3-pip \
+    clang-format \
+    htop \
+    tree \
+    vim
+RUN apt-get clean

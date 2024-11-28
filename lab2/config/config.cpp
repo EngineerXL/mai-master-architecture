@@ -20,6 +20,7 @@ const std::string &Config::get_host() const { return _host; }
 const std::string &Config::get_login() const { return _login; }
 
 const std::string &Config::get_password() const { return _password; }
+
 const std::string &Config::get_database() const { return _database; }
 
 std::string &Config::port() { return _port; }

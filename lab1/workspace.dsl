@@ -101,13 +101,13 @@ workspace "Мессенджер" "Приложения для общения" {
 
         dynamic app "UC04" "Создание группового чата" {
             autoLayout
-            user -> app.message_service "Создать новую группу (POST /group/create)"
+            user -> app.message_service "Создать новую группу (POST /chat)"
             app.message_service -> app.chat_db "Сохранить данные о группе"
         }
 
         dynamic app "UC05" "Добавить пользователя в групповой чат" {
             autoLayout
-            user -> app.message_service "Добавить пользователя в групповой чат (POST /group)"
+            user -> app.message_service "Добавить пользователя в групповой чат (POST /chat/add)"
             app.message_service -> app.user_service "Найти пользователя (GET /user/search/name)"
             app.user_service -> app.user_db "Получить данные о пользователе"
             app.message_service -> app.chat_db "Обновить данные о группе"
@@ -115,7 +115,7 @@ workspace "Мессенджер" "Приложения для общения" {
 
         dynamic app "UC06" "Добавление сообщения в групповой чат" {
             autoLayout
-            user -> app.message_service "Написать сообщение в групповой чат (POST /group/msg/write)"
+            user -> app.message_service "Написать сообщение в групповой чат (POST /chat/msg/write)"
             app.message_service -> app.chat_db "Найти групповой чат"
             app.message_service -> app.user_service "Найти пользователя (GET /user/search/login)"
             app.user_service -> app.user_db "Получить данные о пользователе"
@@ -125,7 +125,7 @@ workspace "Мессенджер" "Приложения для общения" {
 
         dynamic app "UC07" "Загрузка сообщений группового чата" {
             autoLayout
-            user -> app.message_service "Открыть групповой чат (GET /group/msg/read)"
+            user -> app.message_service "Открыть групповой чат (GET /chat/msg/read)"
             app.message_service -> app.chat_db "Найти групповой чат"
             app.message_service -> app.user_service "Найти пользователя (GET /user/search/login)"
             app.user_service -> app.user_db "Получить данные о пользователе"
@@ -137,7 +137,7 @@ workspace "Мессенджер" "Приложения для общения" {
 
         dynamic app "UC08" "Отправка PtP сообщения пользователю" {
             autoLayout
-            user -> app.message_service "Написать сообщение в PtP чат (POST /user/msg/write)"
+            user -> app.message_service "Написать сообщение в PtP чат (POST /chat/msg/write)"
             app.message_service -> app.user_service "Найти пользователя (GET /user/search/name)"
             app.user_service -> app.user_db "Получить данные о пользователе"
             app.message_service -> app.chat_db "Сохранить сообщение"
@@ -145,7 +145,7 @@ workspace "Мессенджер" "Приложения для общения" {
 
         dynamic app "UC09" "Получение списка PtP сообщения пользователю" {
             autoLayout
-            user -> app.message_service "Открыть PtP чат (GET /user/msg/read)"
+            user -> app.message_service "Открыть PtP чат (GET /chat/msg/read)"
             app.message_service -> app.user_service "Найти пользователя (GET /user/search/name)"
             app.user_service -> app.user_db "Получить данные о пользователе"
             app.message_service -> app.chat_db "Получить сообщения из PtP чата"

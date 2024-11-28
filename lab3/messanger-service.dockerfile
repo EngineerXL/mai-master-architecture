@@ -20,5 +20,5 @@ RUN if [ "${BUILD_TYPE}" = "Debug" ] ; \
 RUN cmake --build build -j `nproc`
 
 WORKDIR /app
-RUN cp /build/build/user-service .
+RUN cp /build/build/messanger-service .
 ENTRYPOINT [ "bash", "run.sh" ]

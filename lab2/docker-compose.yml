@@ -21,7 +21,7 @@ services:
     restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "curl -sS http://user-service:8080"]
-      interval: 30s
+      interval: 3s
       timeout: 1s
       retries: 5
     build:
@@ -35,8 +35,8 @@ services:
       - arch-network
 
   user-pgdb:
-    image: postgres
-    container_name: user-pgdb
+    image: postgres:15
+    container_name: ${DB_HOST}
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}

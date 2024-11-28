@@ -1,0 +1,61 @@
+include:
+  - ../lab2/docker-compose.yml
+
+services:
+  messanger-service:
+    tty: true
+    image: messanger-service
+    container_name: messanger-service
+    cap_add:
+      - SYS_PTRACE
+    environment:
+      - MONGO_HOST=${MONGO_HOST}
+      - MONGO_PORT=${MONGO_PORT} 
+      - MONGO_USER=${MONGO_USER}
+      - MONGO_PASSWORD=${MONGO_PASSWORD}
+      - MONGO_DATABASE=${MONGO_DATABASE}
+      - TEST_N_USERS=${TEST_N_USERS}
+      - TEST_N_CHATS=${TEST_N_CHATS}
+      - TEST_N_MESSAGES=${TEST_N_MESSAGES}
+    depends_on:
+      user-service:
+        condition: service_healthy
+      messanger-mongodb:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sS http://user-service:8080"]
+      interval: 3s
+      timeout: 1s
+      retries: 5
+    build:
+      context: .
+      dockerfile: messanger-service.dockerfile
+      args:
+        - BUILD_TYPE=${BUILD_TYPE}
+    ports:
+      - "8081:8080"
+    networks:
+      - arch-network
+
+  messanger-mongodb:
+    image: mongo:5.0
+    container_name: ${MONGO_HOST}
+    # environment:
+    #   - MONGO_INITDB_ROOT_USERNAME=${MONGO_USER}
+    #   - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASSWORD}
+    volumes:
+      - messanger-db:/data/db
+    restart: on-failure
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 3s
+      timeout: 1s
+      retries: 5
+    ports:
+      - "27017:27017"
+    networks:
+      - arch-network
+
+volumes:
+  messanger-db:
