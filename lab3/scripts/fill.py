@@ -29,10 +29,10 @@ if __name__ == "__main__":
     message_collection = db["messages"]
     message_collection.drop()
     for i in range(n_chats):
-        users = random.sample(
+        users = sorted(random.sample(
             range(1, n_users + 1),
             random.choice([2, 2, 2, random.randint(3, max_chat_users)]),
-        )
+        ))
         chat = {
             "_id": i + 1,
             "title": fake.text(TEST_TEXT_LEN),

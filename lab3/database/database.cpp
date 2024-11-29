@@ -7,10 +7,7 @@ Database::Database() : _database_mongo(Config::get().get_mongo_database()) {
     std::cout << "Connecting to mongodb: " << Config::get().get_mongo_host()
               << ":" << Config::get().get_mongo_port() << std::endl;
     _connection_mongo.connect(Config::get().get_mongo_host(),
-                              atoi(Config::get().get_mongo_port().c_str()));
-    // assert(_database_mongo.authenticate(_connection_mongo,
-    //                                     Config::get().get_mongo_login(),
-    //                                     Config::get().get_mongo_password()));
+                              std::stoi(Config::get().get_mongo_port()));
 }
 
 Poco::MongoDB::Database &Database::get_mongo_database() {

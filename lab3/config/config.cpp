@@ -3,8 +3,8 @@
 Config::Config() {
     _mongo_host = std::getenv("MONGO_HOST");
     _mongo_port = std::getenv("MONGO_PORT");
-    _mongo_login = std::getenv("MONGO_USER");
-    _mongo_password = std::getenv("MONGO_PASSWORD");
+    // _mongo_login = std::getenv("MONGO_USER");
+    // _mongo_password = std::getenv("MONGO_PASSWORD");
     _mongo_database = std::getenv("MONGO_DATABASE");
 }
 

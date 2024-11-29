@@ -21,9 +21,11 @@ services:
     restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "curl -sS http://user-service:8080"]
-      interval: 3s
+      interval: 30s
       timeout: 1s
-      retries: 5
+      retries: 10
+      start_period: 30s
+      start_interval: 5s
     build:
       context: .
       dockerfile: user-service.dockerfile
@@ -35,7 +37,7 @@ services:
       - arch-network
 
   user-pgdb:
-    image: postgres:15
+    image: postgres:15.10
     container_name: ${DB_HOST}
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
@@ -60,7 +62,9 @@ services:
     container_name: test-lab2
     build:
       context: .
-      dockerfile: test.dockerfile
+      dockerfile: ../wrk-test.dockerfile
+    volumes:
+      - ./scripts:/app
     depends_on:
       user-service:
         condition: service_healthy
