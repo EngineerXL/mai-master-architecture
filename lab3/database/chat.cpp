@@ -32,7 +32,7 @@ Chat Chat::fromJSON(const std::string &str) {
 
 Poco::JSON::Object::Ptr Chat::toJSON() const {
     Poco::JSON::Object::Ptr root = new Poco::JSON::Object();
-    root->set("id", _id);
+    root->set("_id", _id);
     root->set("title", _title);
     Poco::JSON::Array::Ptr users = new Poco::JSON::Array();
     for (const auto &user : _users) {
@@ -42,12 +42,24 @@ Poco::JSON::Object::Ptr Chat::toJSON() const {
     return root;
 }
 
+void Chat::save_to_database() {
+    database::Database::get().insert("chats", toJSON());
+}
+
 std::optional<Chat> Chat::get_by_id(long id) {
     std::optional<Chat> result;
     std::vector<std::string> results =
         database::Database::get().get_by_id("chats", id);
     if (results.size()) result = fromJSON(results[0]);
     return result;
+}
+
+void Chat::update() {
+    database::Database::get().update_by_id("chats", _id, toJSON());
+}
+
+bool Chat::remove(long id) {
+    return database::Database::get().remove_by_id("chats", id);
 }
 
 long Chat::get_id() const { return _id; }

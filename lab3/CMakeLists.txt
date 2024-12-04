@@ -24,6 +24,7 @@ add_executable(
     database/chat.cpp
     # database/message.cpp
     handlers/messanger_handler.cpp
+    user_service/client.cpp
 )
 
 target_include_directories(${BINARY} PRIVATE "${CMAKE_BINARY_DIR}")

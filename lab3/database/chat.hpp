@@ -18,7 +18,10 @@ class Chat {
     static Chat fromJSON(const std::string &str);
     Poco::JSON::Object::Ptr toJSON() const;
 
+    void save_to_database();
     static std::optional<Chat> get_by_id(long id);
+    void update();
+    static bool remove(long id);
 
     long get_id() const;
     const std::string &get_title() const;

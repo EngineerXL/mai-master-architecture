@@ -6,6 +6,8 @@ Config::Config() {
     // _mongo_login = std::getenv("MONGO_USER");
     // _mongo_password = std::getenv("MONGO_PASSWORD");
     _mongo_database = std::getenv("MONGO_DATABASE");
+    _user_service_host = std::getenv("USER_SERVICE_HOST");
+    _user_service_port = std::stoul(std::getenv("USER_SERVICE_PORT"));
 }
 
 Config &Config::get() {
@@ -27,6 +29,14 @@ const std::string &Config::get_mongo_database() const {
     return _mongo_database;
 }
 
+const std::string &Config::get_user_service_host() const {
+    return _user_service_host;
+}
+
+const uint16_t &Config::get_user_service_port() const {
+    return _user_service_port;
+}
+
 std::string &Config::mongo_port() { return _mongo_port; }
 
 std::string &Config::mongo_host() { return _mongo_host; }
@@ -36,3 +46,7 @@ std::string &Config::mongo_login() { return _mongo_login; }
 std::string &Config::mongo_password() { return _mongo_password; }
 
 std::string &Config::mongo_database() { return _mongo_database; }
+
+std::string &Config::user_service_host() { return _user_service_host; }
+
+uint16_t &Config::user_service_port() { return _user_service_port; }

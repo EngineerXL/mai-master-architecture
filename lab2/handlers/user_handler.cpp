@@ -37,16 +37,8 @@ void UserHandler::handleRequest(HTTPServerRequest &request,
                 Poco::JSON::Stringifier::stringify(root, ostr);
                 return;
             }
-        } else if (uri.getPath() != "/user") {
-            response.setStatus(
-                Poco::Net::HTTPResponse::HTTPStatus::HTTP_METHOD_NOT_ALLOWED);
-            Poco::JSON::Object::Ptr root = new Poco::JSON::Object();
-            root->set("status", 405);
-            root->set("detail", "Request not allowed");
-            root->set("instance", uri.getPath());
-            std::ostream &ostr = response.send();
-            Poco::JSON::Stringifier::stringify(root, ostr);
-        } else if (request.getMethod() == Poco::Net::HTTPRequest::HTTP_POST) {
+        } else if (uri.getPath() == "/user" &&
+                   request.getMethod() == Poco::Net::HTTPRequest::HTTP_POST) {
             database::User user;
             user.first_name() = form.get("first_name");
             user.last_name() = form.get("last_name");
@@ -89,7 +81,8 @@ void UserHandler::handleRequest(HTTPServerRequest &request,
                 response.send();
                 return;
             }
-        } else if (request.getMethod() == Poco::Net::HTTPRequest::HTTP_GET) {
+        } else if (uri.getPath() == "/user" &&
+                   request.getMethod() == Poco::Net::HTTPRequest::HTTP_GET) {
             long id = atol(form.get("id").c_str());
 
             std::optional<database::User> result =
@@ -110,7 +103,8 @@ void UserHandler::handleRequest(HTTPServerRequest &request,
                 Poco::JSON::Stringifier::stringify(root, ostr);
                 return;
             }
-        } else if (request.getMethod() == Poco::Net::HTTPRequest::HTTP_PUT) {
+        } else if (uri.getPath() == "/user" &&
+                   request.getMethod() == Poco::Net::HTTPRequest::HTTP_PUT) {
             long id = atol(form.get("id").c_str());
 
             std::optional<database::User> result =
@@ -170,7 +164,8 @@ void UserHandler::handleRequest(HTTPServerRequest &request,
                 Poco::JSON::Stringifier::stringify(root, ostr);
                 return;
             }
-        } else if (request.getMethod() == Poco::Net::HTTPRequest::HTTP_DELETE) {
+        } else if (uri.getPath() == "/user" &&
+                   request.getMethod() == Poco::Net::HTTPRequest::HTTP_DELETE) {
             long id = atol(form.get("id").c_str());
 
             if (database::User::remove(id)) {
@@ -189,6 +184,15 @@ void UserHandler::handleRequest(HTTPServerRequest &request,
                 Poco::JSON::Stringifier::stringify(root, ostr);
                 return;
             }
+        } else {
+            response.setStatus(
+                Poco::Net::HTTPResponse::HTTPStatus::HTTP_METHOD_NOT_ALLOWED);
+            Poco::JSON::Object::Ptr root = new Poco::JSON::Object();
+            root->set("status", 405);
+            root->set("detail", "Request not allowed");
+            root->set("instance", uri.getPath());
+            std::ostream &ostr = response.send();
+            Poco::JSON::Stringifier::stringify(root, ostr);
         }
     } catch (Poco::NotFoundException &e) {
         response.setStatus(
