@@ -39,6 +39,14 @@ void UserHandler::handleRequest(HTTPServerRequest &request,
             }
         } else if (uri.getPath() == "/user" &&
                    request.getMethod() == Poco::Net::HTTPRequest::HTTP_POST) {
+            if (database::User::search_by_login(form.get("login"))
+                    .has_value()) {
+                std::ostream &ostr = response.send();
+                ostr << Poco::format("Login %s is already taken",
+                                     form.get("login"));
+                response.send();
+                return;
+            }
             database::User user;
             user.first_name() = form.get("first_name");
             user.last_name() = form.get("last_name");
@@ -111,6 +119,15 @@ void UserHandler::handleRequest(HTTPServerRequest &request,
                 database::User::get_by_id(id);
             if (result) {
                 database::User user = result.value();
+                if (form.get("login") != user.login() &&
+                    database::User::search_by_login(form.get("login"))
+                        .has_value()) {
+                    std::ostream &ostr = response.send();
+                    ostr << Poco::format("Login %s is already taken",
+                                         form.get("login"));
+                    response.send();
+                    return;
+                }
                 user.first_name() = form.get("first_name");
                 user.last_name() = form.get("last_name");
                 user.email() = form.get("email");

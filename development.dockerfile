@@ -12,17 +12,21 @@ RUN apt-get install -y \
     libmysqlclient-dev \
     libpq-dev \
     libssl-dev \
-    openssl
+    openssl \
+    wget \
+    zip
 
 # Install Poco
-RUN git clone -b main https://github.com/pocoproject/poco.git
-WORKDIR /poco
+RUN wget https://github.com/pocoproject/poco/archive/refs/tags/poco-1.13.2-release.zip && \
+    unzip poco-1.13.2-release.zip
+WORKDIR /poco-poco-1.13.2-release
 RUN mkdir cmake-build && \
+    ls && \
     cd cmake-build && \
     cmake .. && \
     cmake --build . --config Release && \
     cmake --build . --target install -j `nproc`
-RUN ldconfig && cd .. && rm -rf poco
+RUN ldconfig && cd .. && rm -rf poco-poco-1.13.2-release poco-1.13.2-release.zip
 
 # Install Python and Debug Utilities
 RUN apt-get update
