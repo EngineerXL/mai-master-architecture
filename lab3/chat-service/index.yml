@@ -1,0 +1,177 @@
+openapi: "3.0.0"
+info:
+  version: "1.0.0"
+  title: "Chat service"
+  description: "Chat service"
+
+servers:
+  - url: http://localhost:8081
+
+paths:
+  /chat:
+    post:
+      description: Create new group chat
+      parameters:
+        - name: title
+          in: query
+          required: true
+          schema:
+            $ref: "#/components/schemas/ChatTitle"
+        - name: users
+          in: query
+          required: true
+          schema:
+            $ref: "#/components/schemas/ChatUsers"
+          explode: false
+      responses:
+        200:
+          $ref: "#/components/responses/ChatID"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        404:
+          $ref: "#/components/responses/NotFound"
+        500:
+          $ref: "#/components/responses/InternalServerError"
+    get:
+      description: Get chat information by id
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            $ref: "#/components/schemas/ChatID"
+      responses:
+        200:
+          $ref: "#/components/responses/Chat"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        404:
+          $ref: "#/components/responses/NotFound"
+        500:
+          $ref: "#/components/responses/InternalServerError"
+    put:
+      description: Update user information
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            $ref: "#/components/schemas/UserID"
+        - name: title
+          in: query
+          required: true
+          schema:
+            $ref: "#/components/schemas/ChatTitle"
+        - name: users
+          in: query
+          required: true
+          schema:
+            $ref: "#/components/schemas/ChatUsers"
+          explode: false
+      responses:
+        200:
+          $ref: "#/components/responses/ChatID"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        404:
+          $ref: "#/components/responses/NotFound"
+        500:
+          $ref: "#/components/responses/InternalServerError"
+    delete:
+      description: Delete chat by id
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            $ref: "#/components/schemas/ChatID"
+      responses:
+        200:
+          $ref: "#/components/responses/ChatID"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        404:
+          $ref: "#/components/responses/NotFound"
+        500:
+          $ref: "#/components/responses/InternalServerError"
+
+components:
+  schemas:
+    UserID:
+      description: User ID
+      type: integer
+
+    ChatID:
+      description: Chat ID
+      type: integer
+
+    ChatTitle:
+      description: Chat Title
+      type: string
+
+    ChatUsers:
+      description: Chat Users
+      type: array
+      items:
+        $ref: "#/components/schemas/UserID"
+
+    Chat:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/ChatID"
+        title:
+          $ref: "#/components/schemas/ChatTitle"
+        users:
+          $ref: "#/components/schemas/ChatUsers"
+
+    Error:
+      type: object
+      properties:
+        status:
+          description: Error code
+          type: integer
+        detail:
+          description: Human-readable error description
+          type: string
+        instance:
+          description: Requested path
+          type: string
+
+  responses:
+    Chat:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Chat"
+    ChatID:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ChatID"
+    BadRequest:
+      description: Request is incomplete
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    NotFound:
+      description: Object not found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    NotAllowed:
+      description: Method is not allowed
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"

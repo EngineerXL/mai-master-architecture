@@ -18,7 +18,9 @@ jobs:
         run: cd lab2 && docker compose build user-service
       - name: Run lab2 wrk test
         run: cd lab2 && bash scripts/test.sh
-      - name: Build the Docker image messanger-service
-        run: cd lab3 && docker compose build messanger-service
+      - name: Build the Docker image chat-service
+        run: cd lab3 && docker compose build chat-service
+      - name: Build the Docker image message-service
+        run: cd lab3 && docker compose build message-service
       - name: Run lab3 wrk test
         run: cd lab3 && bash scripts/test.sh

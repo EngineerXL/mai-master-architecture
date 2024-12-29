@@ -23,6 +23,8 @@ class Chat {
     void update();
     static bool remove(long id);
 
+    bool contains_user(long id);
+
     long get_id() const;
     const std::string &get_title() const;
     const std::vector<long> &get_users() const;

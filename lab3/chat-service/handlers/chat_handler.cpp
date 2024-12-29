@@ -1,6 +1,6 @@
-#include "messanger_handler.hpp"
+#include "chat_handler.hpp"
 
-#include "../user_service/client.hpp"
+#include "../../common/user_client/user_client.hpp"
 
 std::vector<long> parse_ids(const std::string &json) {
     std::stringstream ss(json);
@@ -15,7 +15,7 @@ std::vector<long> parse_ids(const std::string &json) {
     return res;
 }
 
-void UserHandler::handleRequest(HTTPServerRequest &request,
+void ChatHandler::handleRequest(HTTPServerRequest &request,
                                 HTTPServerResponse &response) {
     HTMLForm form(request, request.stream());
     Poco::URI uri(request.getURI());

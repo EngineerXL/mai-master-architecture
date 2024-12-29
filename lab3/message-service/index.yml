@@ -1,31 +1,35 @@
 openapi: "3.0.0"
 info:
   version: "1.0.0"
-  title: "Messanger service"
-  description: "Messanger service"
+  title: "Message service"
+  description: "Message service"
 
 servers:
-  - url: http://localhost:8081
+  - url: http://localhost:8082
 
 paths:
-  /chat:
+  /message/chat:
     post:
-      description: Create new group chat
+      description: Send message in the group chat
       parameters:
-        - name: title
+        - name: chat_id
           in: query
           required: true
           schema:
-            $ref: "#/components/schemas/ChatTitle"
-        - name: users
+            $ref: "#/components/schemas/ChatID"
+        - name: text
           in: query
           required: true
           schema:
-            $ref: "#/components/schemas/ChatUsers"
-          explode: false
+            $ref: "#/components/schemas/Text"
+        - name: user
+          in: query
+          required: true
+          schema:
+            $ref: "#/components/schemas/UserID"
       responses:
         200:
-          $ref: "#/components/responses/ChatID"
+          $ref: "#/components/responses/Message"
         400:
           $ref: "#/components/responses/BadRequest"
         404:
@@ -33,7 +37,7 @@ paths:
         500:
           $ref: "#/components/responses/InternalServerError"
     get:
-      description: Get chat information by id
+      description: Get messages by chat id
       parameters:
         - name: id
           in: query
@@ -42,52 +46,7 @@ paths:
             $ref: "#/components/schemas/ChatID"
       responses:
         200:
-          $ref: "#/components/responses/Chat"
-        400:
-          $ref: "#/components/responses/BadRequest"
-        404:
-          $ref: "#/components/responses/NotFound"
-        500:
-          $ref: "#/components/responses/InternalServerError"
-    put:
-      description: Update user information
-      parameters:
-        - name: id
-          in: query
-          required: true
-          schema:
-            $ref: "#/components/schemas/UserID"
-        - name: title
-          in: query
-          required: true
-          schema:
-            $ref: "#/components/schemas/ChatTitle"
-        - name: users
-          in: query
-          required: true
-          schema:
-            $ref: "#/components/schemas/ChatUsers"
-          explode: false
-      responses:
-        200:
-          $ref: "#/components/responses/ChatID"
-        400:
-          $ref: "#/components/responses/BadRequest"
-        404:
-          $ref: "#/components/responses/NotFound"
-        500:
-          $ref: "#/components/responses/InternalServerError"
-    delete:
-      description: Delete chat by id
-      parameters:
-        - name: id
-          in: query
-          required: true
-          schema:
-            $ref: "#/components/schemas/ChatID"
-      responses:
-        200:
-          $ref: "#/components/responses/ChatID"
+          $ref: "#/components/responses/MessageArray"
         400:
           $ref: "#/components/responses/BadRequest"
         404:
@@ -101,29 +60,38 @@ components:
       description: User ID
       type: integer
 
-    ChatID:
-      description: Chat ID
-      type: integer
-
-    ChatTitle:
-      description: Chat Title
-      type: string
-
     ChatUsers:
       description: Chat Users
       type: array
       items:
         $ref: "#/components/schemas/UserID"
 
-    Chat:
+    ChatID:
+      description: Chat ID
+      type: integer
+
+    Text:
+      description: Message text
+      type: string
+
+    Message:
       type: object
       properties:
         id:
+          description: Message id
+          type: integer
+        chat_id:
           $ref: "#/components/schemas/ChatID"
-        title:
-          $ref: "#/components/schemas/ChatTitle"
+        text:
+          $ref: "#/components/schemas/Text"
         users:
           $ref: "#/components/schemas/ChatUsers"
+
+    MessageArray:
+      description: List of messages
+      type: array
+      items:
+        $ref: "#/components/schemas/Message"
 
     Error:
       type: object
@@ -139,12 +107,18 @@ components:
           type: string
 
   responses:
-    Chat:
+    Message:
       description: OK
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Chat"
+            $ref: "#/components/schemas/Message"
+    MessageArray:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/MessageArray"
     ChatID:
       description: OK
       content:

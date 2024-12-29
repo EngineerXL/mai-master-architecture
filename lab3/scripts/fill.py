@@ -42,7 +42,7 @@ if __name__ == "__main__":
         for j in range(n_messages):
             message = {
                 "_id": i * n_messages + j + 1,
-                "chatid": i,
+                "chat_id": i,
                 "text": fake.text(TEST_TEXT_LEN),
                 "user": random.choice(users),
             }

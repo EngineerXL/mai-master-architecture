@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-#include "../handlers/messanger_handler.hpp"
+#include "../handlers/chat_handler.hpp"
 
 class HTTPRequestFactory : public HTTPRequestHandlerFactory {
    public:
@@ -12,7 +12,7 @@ class HTTPRequestFactory : public HTTPRequestHandlerFactory {
     HTTPRequestHandler* createRequestHandler(const HTTPServerRequest& request) {
         std::cout << "request:" << request.getURI() << std::endl;
         if (request.getURI().starts_with("/chat"))
-            return new UserHandler(_format);
+            return new ChatHandler(_format);
         return 0;
     }
 

@@ -43,11 +43,12 @@ using Poco::Util::OptionCallback;
 using Poco::Util::OptionSet;
 using Poco::Util::ServerApplication;
 
-#include "../database/chat.hpp"
+#include "../../common/database/chat.hpp"
+#include "../../common/database/message.hpp"
 
-class UserHandler : public HTTPRequestHandler {
+class MessageHandler : public HTTPRequestHandler {
    public:
-    UserHandler(const std::string &format) : _format(format) {}
+    MessageHandler(const std::string &format) : _format(format) {}
 
     void handleRequest(HTTPServerRequest &request,
                        HTTPServerResponse &response);

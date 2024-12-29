@@ -8,7 +8,6 @@
 #include <exception>
 #include <sstream>
 
-#include "../config/config.hpp"
 #include "database.hpp"
 
 using namespace Poco::Data::Keywords;
@@ -60,6 +59,11 @@ void Chat::update() {
 
 bool Chat::remove(long id) {
     return database::Database::get().remove_by_id("chats", id);
+}
+
+bool Chat::contains_user(long id) {
+    auto it = std::lower_bound(_users.begin(), _users.end(), id);
+    return it != _users.end() && *it == id;
 }
 
 long Chat::get_id() const { return _id; }

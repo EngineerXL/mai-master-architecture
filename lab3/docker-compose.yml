@@ -2,15 +2,15 @@ include:
   - ../lab2/docker-compose.yml
 
 services:
-  messanger-service:
+  chat-service:
     tty: true
-    image: messanger-service
-    container_name: messanger-service
+    image: chat-service
+    container_name: chat-service
     cap_add:
       - SYS_PTRACE
     environment:
       - MONGO_HOST=${MONGO_HOST}
-      - MONGO_PORT=${MONGO_PORT} 
+      - MONGO_PORT=${MONGO_PORT}
       # - MONGO_USER=${MONGO_USER}
       # - MONGO_PASSWORD=${MONGO_PASSWORD}
       - MONGO_DATABASE=${MONGO_DATABASE}
@@ -19,6 +19,8 @@ services:
       - TEST_N_MESSAGES=${TEST_N_MESSAGES}
       - USER_SERVICE_HOST=user-service
       - USER_SERVICE_PORT=8080
+      - CHAT_SERVICE_HOST=chat-service
+      - CHAT_SERVICE_PORT=8080
     depends_on:
       user-service:
         condition: service_healthy
@@ -26,7 +28,7 @@ services:
         condition: service_healthy
     restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", "curl -sS http://messanger-service:8080"]
+      test: ["CMD-SHELL", "curl -sS http://chat-service:8080"]
       interval: 30s
       timeout: 1s
       retries: 10
@@ -34,11 +36,55 @@ services:
       start_interval: 5s
     build:
       context: .
-      dockerfile: messanger-service.dockerfile
+      dockerfile: chat-service/chat-service.dockerfile
       args:
         - BUILD_TYPE=${BUILD_TYPE}
     ports:
       - "8081:8080"
+    networks:
+      - arch-network
+
+  message-service:
+    tty: true
+    image: message-service
+    container_name: message-service
+    cap_add:
+      - SYS_PTRACE
+    environment:
+      - MONGO_HOST=${MONGO_HOST}
+      - MONGO_PORT=${MONGO_PORT}
+      # - MONGO_USER=${MONGO_USER}
+      # - MONGO_PASSWORD=${MONGO_PASSWORD}
+      - MONGO_DATABASE=${MONGO_DATABASE}
+      - TEST_N_USERS=${TEST_N_USERS}
+      - TEST_N_CHATS=${TEST_N_CHATS}
+      - TEST_N_MESSAGES=${TEST_N_MESSAGES}
+      - USER_SERVICE_HOST=user-service
+      - USER_SERVICE_PORT=8080
+      - CHAT_SERVICE_HOST=chat-service
+      - CHAT_SERVICE_PORT=8080
+    depends_on:
+      user-service:
+        condition: service_healthy
+      chat-service:
+        condition: service_healthy
+      messanger-mongodb:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sS http://message-service:8080"]
+      interval: 30s
+      timeout: 1s
+      retries: 10
+      start_period: 30s
+      start_interval: 5s
+    build:
+      context: .
+      dockerfile: message-service/message-service.dockerfile
+      args:
+        - BUILD_TYPE=${BUILD_TYPE}
+    ports:
+      - "8082:8080"
     networks:
       - arch-network
 
@@ -70,7 +116,9 @@ services:
     volumes:
       - ./scripts:/app
     depends_on:
-      messanger-service:
+      chat-service:
+        condition: service_healthy
+      message-service:
         condition: service_healthy
     networks:
       - arch-network

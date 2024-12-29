@@ -38,10 +38,10 @@
             }
         },
         {
-            "name": "(gdb) Pipe Attach --- Lab 3 messanger-service",
+            "name": "(gdb) Pipe Attach --- Lab 3 chat-service",
             "type": "cppdbg",
             "request": "attach",
-            "program": "/app/messanger-service",
+            "program": "/app/chat-service",
             "processId": "${command:pickRemoteProcess}",
             "pipeTransport": {
                 "pipeCwd": "${workspaceFolder}",
@@ -49,7 +49,43 @@
                 "pipeArgs": [
                     "exec",
                     "-i",
-                    "messanger-service",
+                    "chat-service",
+                    "sh",
+                    "-c"
+                ],
+                "debuggerPath": "/usr/bin/gdb"
+            },
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Set Disassembly Flavor to Intel",
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+            ],
+            "sourceFileMap": {
+                // "remote": "local"
+                "/build": "${workspaceFolder}/lab3"
+            }
+        },
+        {
+            "name": "(gdb) Pipe Attach --- Lab 3 message-service",
+            "type": "cppdbg",
+            "request": "attach",
+            "program": "/app/message-service",
+            "processId": "${command:pickRemoteProcess}",
+            "pipeTransport": {
+                "pipeCwd": "${workspaceFolder}",
+                "pipeProgram": "docker",
+                "pipeArgs": [
+                    "exec",
+                    "-i",
+                    "message-service",
                     "sh",
                     "-c"
                 ],
