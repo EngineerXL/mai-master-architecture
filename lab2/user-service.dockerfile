@@ -3,13 +3,15 @@ FROM cpp-poco
 ARG BUILD_TYPE=Release
 
 WORKDIR /app
-COPY scripts/requirements.txt .
+COPY lab2/scripts/requirements.txt .
 RUN pip install -r requirements.txt
-COPY scripts/fill.py .
-COPY scripts/run.sh .
+COPY lab2/scripts/fill.py .
+COPY lab2/scripts/run.sh .
 
 WORKDIR /build
-COPY . .
+COPY common common
+WORKDIR /build/service
+COPY lab3 .
 
 RUN if [ "${BUILD_TYPE}" = "Debug" ] ; \
     then \
@@ -20,5 +22,5 @@ RUN if [ "${BUILD_TYPE}" = "Debug" ] ; \
 RUN cmake --build build -j `nproc`
 
 WORKDIR /app
-RUN cp /build/build/user-service .
+RUN cp /build/service/build/user-service .
 ENTRYPOINT [ "bash", "run.sh" ]

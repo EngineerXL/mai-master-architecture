@@ -126,6 +126,16 @@ std::vector<std::string> Database::get_by_id(const std::string &collection,
     return select(collection, selector);
 }
 
+std::vector<std::string> Database::get_by_users_array(
+    const std::string &collection, const std::vector<long> &ids) {
+    Poco::MongoDB::Document selector;
+    Poco::MongoDB::Array &ar = selector.addNewArray("users");
+    for (long id : ids) {
+        ar.add(id);
+    }
+    return select(collection, selector);
+}
+
 void Database::update_by_id(const std::string &collection, long id,
                             const Poco::JSON::Object::Ptr &json) {
     Poco::MongoDB::Document selector;

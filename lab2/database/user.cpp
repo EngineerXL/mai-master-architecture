@@ -1,15 +1,13 @@
-#include "user.hpp"
+#include "../../common/database/user.hpp"
 
 #include <Poco/Data/RecordSet.h>
 #include <Poco/Data/SessionFactory.h>
-#include <Poco/Dynamic/Var.h>
-#include <Poco/JSON/Parser.h>
 
 #include <exception>
 #include <sstream>
 
 #include "../config/config.hpp"
-#include "database.hpp"
+#include "../database/database.hpp"
 
 using namespace Poco::Data::Keywords;
 using Poco::Data::Session;
@@ -40,35 +38,6 @@ void User::init() {
         std::cout << "connection:" << e.displayText() << std::endl;
         throw;
     }
-}
-
-User User::fromJSON(const std::string &str) {
-    User user;
-    Poco::JSON::Parser parser;
-    Poco::Dynamic::Var result = parser.parse(str);
-    Poco::JSON::Object::Ptr object = result.extract<Poco::JSON::Object::Ptr>();
-
-    user.id() = object->getValue<long>("id");
-    user.first_name() = object->getValue<std::string>("first_name");
-    user.last_name() = object->getValue<std::string>("last_name");
-    user.email() = object->getValue<std::string>("email");
-    user.login() = object->getValue<std::string>("login");
-    user.password() = object->getValue<std::string>("password");
-
-    return user;
-}
-
-Poco::JSON::Object::Ptr User::toJSON() const {
-    Poco::JSON::Object::Ptr root = new Poco::JSON::Object();
-
-    root->set("id", _id);
-    root->set("first_name", _first_name);
-    root->set("last_name", _last_name);
-    root->set("email", _email);
-    root->set("login", _login);
-    root->set("password", _password);
-
-    return root;
 }
 
 bool User::check_name(const std::string &name, std::string &reason) {
@@ -262,28 +231,4 @@ std::optional<User> User::search_by_login(std::string login) {
     }
     return {};
 }
-
-const std::string &User::get_login() const { return _login; }
-
-const std::string &User::get_password() const { return _password; }
-
-std::string &User::login() { return _login; }
-
-std::string &User::password() { return _password; }
-
-long User::get_id() const { return _id; }
-
-const std::string &User::get_first_name() const { return _first_name; }
-
-const std::string &User::get_last_name() const { return _last_name; }
-
-const std::string &User::get_email() const { return _email; }
-
-long &User::id() { return _id; }
-
-std::string &User::first_name() { return _first_name; }
-
-std::string &User::last_name() { return _last_name; }
-
-std::string &User::email() { return _email; }
 }  // namespace database

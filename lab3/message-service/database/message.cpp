@@ -8,7 +8,7 @@
 #include <exception>
 #include <sstream>
 
-#include "database.hpp"
+#include "../../common/database/database.hpp"
 
 using namespace Poco::Data::Keywords;
 using Poco::Data::Session;

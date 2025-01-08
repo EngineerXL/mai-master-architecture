@@ -35,8 +35,8 @@ services:
       start_period: 30s
       start_interval: 5s
     build:
-      context: .
-      dockerfile: chat-service/chat-service.dockerfile
+      context: ..
+      dockerfile: lab3/chat-service/chat-service.dockerfile
       args:
         - BUILD_TYPE=${BUILD_TYPE}
     ports:
@@ -79,8 +79,8 @@ services:
       start_period: 30s
       start_interval: 5s
     build:
-      context: .
-      dockerfile: message-service/message-service.dockerfile
+      context: ..
+      dockerfile: lab3/message-service/message-service.dockerfile
       args:
         - BUILD_TYPE=${BUILD_TYPE}
     ports:

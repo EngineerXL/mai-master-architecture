@@ -27,8 +27,8 @@ services:
       start_period: 30s
       start_interval: 5s
     build:
-      context: .
-      dockerfile: user-service.dockerfile
+      context: ..
+      dockerfile: lab2/user-service.dockerfile
       args:
         - BUILD_TYPE=${BUILD_TYPE}
     ports:

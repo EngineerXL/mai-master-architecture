@@ -43,7 +43,7 @@ using Poco::Util::OptionCallback;
 using Poco::Util::OptionSet;
 using Poco::Util::ServerApplication;
 
-#include "../database/user.hpp"
+#include "../../common/database/user.hpp"
 
 class UserHandler : public HTTPRequestHandler {
    public:

@@ -1,7 +1,7 @@
 #ifndef HTTPWEBSERVER_HPP
 #define HTTPWEBSERVER_HPP
 
-#include "../database/user.hpp"
+#include "../../common/database/user.hpp"
 #include "http_request_factory.hpp"
 
 class HTTPWebServer : public Poco::Util::ServerApplication {

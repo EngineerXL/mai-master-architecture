@@ -20,6 +20,7 @@ class Chat {
 
     void save_to_database();
     static std::optional<Chat> get_by_id(long id);
+    static std::optional<Chat> get_by_users_array(const std::vector<long> &ids);
     void update();
     static bool remove(long id);
 

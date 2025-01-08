@@ -21,8 +21,10 @@ add_executable(
     main.cpp
     ../common/config/config.cpp 
     ../common/database/database.cpp
-    ../common/database/chat.cpp
+    ../common/database/chat_json.cpp
     ../common/user_client/user_client.cpp
+    ../../common/database/user_json.cpp
+    database/chat.cpp
     handlers/chat_handler.cpp
 )
 

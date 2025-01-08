@@ -53,6 +53,56 @@ paths:
           $ref: "#/components/responses/NotFound"
         500:
           $ref: "#/components/responses/InternalServerError"
+  /message/user:
+    post:
+      description: Send message to user
+      parameters:
+        - name: to_user_id
+          in: query
+          required: true
+          schema:
+            $ref: "#/components/schemas/UserID"
+        - name: from_user_id
+          in: query
+          required: true
+          schema:
+            $ref: "#/components/schemas/UserID"
+        - name: text
+          in: query
+          required: true
+          schema:
+            $ref: "#/components/schemas/Text"
+      responses:
+        200:
+          $ref: "#/components/responses/Message"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        404:
+          $ref: "#/components/responses/NotFound"
+        500:
+          $ref: "#/components/responses/InternalServerError"
+    get:
+      description: Get messages between two users
+      parameters:
+        - name: from_user_id
+          in: query
+          required: true
+          schema:
+            $ref: "#/components/schemas/UserID"
+        - name: to_user_id
+          in: query
+          required: true
+          schema:
+            $ref: "#/components/schemas/UserID"
+      responses:
+        200:
+          $ref: "#/components/responses/MessageArray"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        404:
+          $ref: "#/components/responses/NotFound"
+        500:
+          $ref: "#/components/responses/InternalServerError"
 
 components:
   schemas:

@@ -3,6 +3,7 @@
 #include <optional>
 
 #include "../config/config.hpp"
+#include "../../../common/database/user.hpp"
 
 class UserServiceClient {
    private:
@@ -12,7 +13,5 @@ class UserServiceClient {
 
    public:
     static UserServiceClient& get();
-    bool contains_user(long id);
-    std::optional<long> find_user(const std::string& first_name,
-                                  const std::string& last_name);
+    std::optional<database::User> get_user_by_id(long id);
 };

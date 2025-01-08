@@ -44,7 +44,7 @@ using Poco::Util::OptionSet;
 using Poco::Util::ServerApplication;
 
 #include "../../common/database/chat.hpp"
-#include "../../common/database/message.hpp"
+#include "../database/message.hpp"
 
 class MessageHandler : public HTTPRequestHandler {
    public:

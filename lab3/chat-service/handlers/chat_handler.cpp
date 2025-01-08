@@ -35,7 +35,7 @@ void ChatHandler::handleRequest(HTTPServerRequest &request,
             std::string reason;
 
             for (long id : chat.users()) {
-                if (!UserServiceClient::get().contains_user(id)) {
+                if (!UserServiceClient::get().get_user_by_id(id).has_value()) {
                     reason = Poco::format("User %li not found", id);
                     check_result = false;
                     message += reason;
@@ -78,6 +78,28 @@ void ChatHandler::handleRequest(HTTPServerRequest &request,
                 Poco::JSON::Stringifier::stringify(root, ostr);
                 return;
             }
+        } else if (uri.getPath() == "/chat/find_by_users" &&
+                   request.getMethod() == Poco::Net::HTTPRequest::HTTP_GET) {
+            std::vector<long> ids = parse_ids(form.get("users"));
+
+            std::optional<database::Chat> result =
+                database::Chat::get_by_users_array(ids);
+            if (result) {
+                response.setStatus(Poco::Net::HTTPResponse::HTTP_OK);
+                std::ostream &ostr = response.send();
+                Poco::JSON::Stringifier::stringify(result->toJSON(), ostr);
+                return;
+            } else {
+                response.setStatus(
+                    Poco::Net::HTTPResponse::HTTPStatus::HTTP_NOT_FOUND);
+                Poco::JSON::Object::Ptr root = new Poco::JSON::Object();
+                root->set("status", 404);
+                root->set("detail", "Chat not found");
+                root->set("instance", uri.getPath());
+                std::ostream &ostr = response.send();
+                Poco::JSON::Stringifier::stringify(root, ostr);
+                return;
+            }
         } else if (uri.getPath() == "/chat" &&
                    request.getMethod() == Poco::Net::HTTPRequest::HTTP_PUT) {
             long id = atol(form.get("id").c_str());
@@ -94,7 +116,9 @@ void ChatHandler::handleRequest(HTTPServerRequest &request,
                 std::string reason;
 
                 for (long id : chat.users()) {
-                    if (!UserServiceClient::get().contains_user(id)) {
+                    if (!UserServiceClient::get()
+                             .get_user_by_id(id)
+                             .has_value()) {
                         reason = Poco::format("User %li not found", id);
                         check_result = false;
                         message += reason;

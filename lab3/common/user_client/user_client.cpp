@@ -12,20 +12,18 @@ UserServiceClient& UserServiceClient::get() {
     return _instance;
 }
 
-bool UserServiceClient::contains_user(long id) {
+std::optional<database::User> UserServiceClient::get_user_by_id(long id) {
     Poco::Net::HTTPRequest request(Poco::Net::HTTPRequest::HTTP_GET,
                                    Poco::format("/user?id=%li", id),
                                    Poco::Net::HTTPMessage::HTTP_1_1);
     request.setContentType("application/json");
     _session.sendRequest(request);
     Poco::Net::HTTPResponse response;
-    _session.receiveResponse(response);
-    return response.getStatus() == Poco::Net::HTTPResponse::HTTP_OK;
+    std::istream& recv = _session.receiveResponse(response);
+    if (response.getStatus() == Poco::Net::HTTPResponse::HTTP_OK) {
+        return database::User::fromJSON(
+            {std::istreambuf_iterator<char>(recv), {}});
+    } else {
+        return {};
+    }
 }
-
-// std::optional<long> UserServiceClient::find_user(const std::string&
-// first_name,
-//                                                  const std::string&
-//                                                  last_name) {
-//     return std::optional<long>();
-// }

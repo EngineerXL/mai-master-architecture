@@ -15,4 +15,7 @@ class ChatServiceClient {
    public:
     static ChatServiceClient& get();
     std::optional<database::Chat> get_chat(long id);
+    std::optional<database::Chat> get_chat_by_users_array(
+        const std::vector<long>& ids);
+    long create_chat(const database::Chat& chat);
 };

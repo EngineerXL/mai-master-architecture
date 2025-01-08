@@ -22,6 +22,7 @@ add_executable(
     config/config.cpp 
     database/database.cpp
     database/user.cpp
+    ../common/database/user_json.cpp
     handlers/user_handler.cpp
 )
 
