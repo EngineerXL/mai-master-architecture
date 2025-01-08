@@ -59,7 +59,7 @@ long ChatServiceClient::create_chat(const database::Chat& chat) {
     }
     Poco::Net::HTTPRequest request(
         Poco::Net::HTTPRequest::HTTP_POST,
-        Poco::format("/chat/?title=%s&users=%s", chat.get_title(),
+        Poco::format("/chat?title=%s&users=%s", chat.get_title(),
                      req_ids.str()),
         Poco::Net::HTTPMessage::HTTP_1_1);
     request.setContentType("application/json");
@@ -67,9 +67,7 @@ long ChatServiceClient::create_chat(const database::Chat& chat) {
     Poco::Net::HTTPResponse response;
     std::istream& recv = _session.receiveResponse(response);
     if (response.getStatus() == Poco::Net::HTTPResponse::HTTP_OK) {
-        return database::Chat::fromJSON(
-                   {std::istreambuf_iterator<char>(recv), {}})
-            .get_id();
+        return std::stol(std::string{std::istreambuf_iterator<char>(recv), {}});
     } else {
         throw std::runtime_error("Can't create p2p chat");
     }

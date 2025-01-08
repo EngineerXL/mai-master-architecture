@@ -1,6 +1,6 @@
 include ../makefile
 
-user-service:
+build_user-service:
 	docker compose build user-service
 
 up:
@@ -11,4 +11,4 @@ down:
 
 restart: down up
 
-all: cpp-poco user-service restart
+all: cpp-poco build_user-service restart

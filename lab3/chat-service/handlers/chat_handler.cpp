@@ -1,5 +1,7 @@
 #include "chat_handler.hpp"
 
+#include <random>
+
 #include "../../common/user_client/user_client.hpp"
 
 std::vector<long> parse_ids(const std::string &json) {
@@ -15,6 +17,8 @@ std::vector<long> parse_ids(const std::string &json) {
     return res;
 }
 
+std::mt19937 id_generator(998244353);
+
 void ChatHandler::handleRequest(HTTPServerRequest &request,
                                 HTTPServerResponse &response) {
     HTMLForm form(request, request.stream());
@@ -25,8 +29,8 @@ void ChatHandler::handleRequest(HTTPServerRequest &request,
     try {
         if (uri.getPath() == "/chat" &&
             request.getMethod() == Poco::Net::HTTPRequest::HTTP_POST) {
-            // todo generate ids
             database::Chat chat;
+            chat.id() = id_generator();
             chat.title() = form.get("title");
             chat.users() = parse_ids(form.get("users"));
 

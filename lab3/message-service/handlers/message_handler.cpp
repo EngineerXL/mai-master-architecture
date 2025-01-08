@@ -1,7 +1,11 @@
 #include "message_handler.hpp"
 
+#include <random>
+
 #include "../../common/user_client/user_client.hpp"
 #include "../chat_client/chat_client.hpp"
+
+std::mt19937 id_generator(998244353);
 
 void MessageHandler::handleRequest(HTTPServerRequest &request,
                                    HTTPServerResponse &response) {
@@ -19,8 +23,8 @@ void MessageHandler::handleRequest(HTTPServerRequest &request,
             std::optional<database::Chat> chat =
                 ChatServiceClient::get().get_chat(chat_id);
             if (chat.has_value() && chat.value().contains_user(user)) {
-                // todo generate ids
                 database::Message msg;
+                msg.id() = id_generator();
                 msg.chat_id() = chat_id;
                 msg.text() = form.get("text");
                 msg.user() = user;
@@ -83,7 +87,8 @@ void MessageHandler::handleRequest(HTTPServerRequest &request,
                            .has_value()) {
                 response.setStatus(Poco::Net::HTTPResponse::HTTP_OK);
                 std::ostream &ostr = response.send();
-                Poco::JSON::Stringifier::stringify({}, ostr);
+                Poco::JSON::Stringifier::stringify(std::vector<std::string>(),
+                                                   ostr);
                 return;
             } else {
                 response.setStatus(
@@ -111,7 +116,7 @@ void MessageHandler::handleRequest(HTTPServerRequest &request,
                         .has_value()) {
                     database::Chat p2p_chat;
                     p2p_chat.title() =
-                        Poco::format("P2P chat - %li %li", ids[0], ids[1]);
+                        Poco::format("P2Pchat-%li-%li", ids[0], ids[1]);
                     p2p_chat.users() = ids;
                     p2p_chat.id() =
                         ChatServiceClient::get().create_chat(p2p_chat);
@@ -128,8 +133,8 @@ void MessageHandler::handleRequest(HTTPServerRequest &request,
                     return;
                 }
             }
-            // todo generate ids
             database::Message msg;
+            msg.id() = id_generator();
             msg.chat_id() = chat.value().get_id();
             msg.text() = form.get("text");
             msg.user() = from_user_id;

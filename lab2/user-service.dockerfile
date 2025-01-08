@@ -11,7 +11,7 @@ COPY lab2/scripts/run.sh .
 WORKDIR /build
 COPY common common
 WORKDIR /build/service
-COPY lab3 .
+COPY lab2 .
 
 RUN if [ "${BUILD_TYPE}" = "Debug" ] ; \
     then \
